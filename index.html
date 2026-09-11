@@ -143,12 +143,10 @@
 <body>
 
 <div class="app-container">
-  <!-- 미리보기 캔버스 영역 -->
   <div class="preview-section">
     <canvas id="cardCanvas"></canvas>
   </div>
 
-  <!-- 컨트롤 패널 -->
   <div class="controls-section">
     <h2>짤·카드 스튜디오</h2>
     
@@ -206,7 +204,6 @@
   const canvas = document.getElementById('cardCanvas');
   const ctx = canvas.getContext('2d');
 
-  // DOM 참조
   const aspectRatioSelect = document.getElementById('aspectRatio');
   const imageUpload = document.getElementById('imageUpload');
   const captionInput = document.getElementById('captionInput');
@@ -217,7 +214,6 @@
   const exportJsonBtn = document.getElementById('exportJsonBtn');
   const importJson = document.getElementById('importJson');
 
-  // 기본 상태값
   let state = {
     ratio: '1:1',
     caption: '오늘 점심은 치킨이닭',
@@ -252,19 +248,19 @@
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. 캐릭터 및 접시 배경 그리기
+    // 캐릭터 및 식탁 그리기
     drawCharacterAndScene();
 
-    // 2. 음식 이미지 접시에 가득 차게 그리기
+    // 음식 사진 그리기
     if (foodImageObj) {
       drawFoodImageOnPlate();
     }
 
-    // 3. 문구 텍스트 그리기
+    // 자막 텍스트 그리기
     drawCaption();
   }
 
-  // Pure Canvas로 캐릭터와 식탁/접시 직접 그리기
+  // 캔버스 자체 코드로 귀여운 캐릭터 직접 그리기
   function drawCharacterAndScene() {
     const w = canvas.width;
     const h = canvas.height;
@@ -278,7 +274,6 @@
     const tableY = h * 0.58;
     ctx.fillRect(0, tableY, w, h - tableY);
     
-    // 식탁 테두리 선
     ctx.beginPath();
     ctx.moveTo(0, tableY);
     ctx.lineTo(w, tableY);
@@ -286,11 +281,11 @@
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    // --- 캐릭터 그리기 ---
+    // --- 캐릭터 ---
     const cx = w / 2;
     const cy = h * 0.32;
 
-    // 머리카락 (뒷부분)
+    // 뒷머리
     ctx.beginPath();
     ctx.arc(cx, cy - 10, 110, 0, Math.PI * 2);
     ctx.fillStyle = "#4a2e18";
@@ -304,13 +299,13 @@
     ctx.fillStyle = "#f8a5c2";
     ctx.fill();
 
-    // 옷 카라 (흰색)
+    // 옷 깃
     ctx.beginPath();
     ctx.ellipse(cx, cy + 85, 45, 18, 0, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    // 얼굴 (살구색)
+    // 얼굴
     ctx.beginPath();
     ctx.arc(cx, cy, 85, 0, Math.PI * 2);
     ctx.fillStyle = "#ffdbac";
@@ -322,14 +317,14 @@
     ctx.fillStyle = "#4a2e18";
     ctx.fill();
 
-    // 눈 (큰 원)
+    // 눈
     ctx.beginPath();
     ctx.arc(cx - 35, cy, 18, 0, Math.PI * 2);
     ctx.arc(cx + 35, cy, 18, 0, Math.PI * 2);
     ctx.fillStyle = "#222222";
     ctx.fill();
 
-    // 눈 반사광 (흰점)
+    // 눈동자 하이라이트
     ctx.beginPath();
     ctx.arc(cx - 40, cy - 5, 6, 0, Math.PI * 2);
     ctx.arc(cx + 30, cy - 5, 6, 0, Math.PI * 2);
@@ -343,13 +338,12 @@
     ctx.fillStyle = "rgba(255, 107, 107, 0.4)";
     ctx.fill();
 
-    // 입 (벌린 벌린 입)
+    // 입
     ctx.beginPath();
     ctx.arc(cx, cy + 30, 25, 0, Math.PI);
     ctx.fillStyle = "#c0392b";
     ctx.fill();
 
-    // 양손 (포크 / 스푼 들기)
     // 왼쪽 포크
     ctx.fillStyle = "#d1d8e0";
     ctx.fillRect(cx - 140, cy + 30, 12, 80);
@@ -366,19 +360,17 @@
     ctx.fillStyle = "#ffdbac";
     ctx.fill();
 
-    // --- 접시 그리기 ---
+    // --- 접시 ---
     const plateX = w / 2;
     const plateY = h * 0.65;
     const rx = w * 0.35;
     const ry = h * 0.11;
 
-    // 접시 그림자
     ctx.beginPath();
     ctx.ellipse(plateX, plateY + 8, rx, ry, 0, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
     ctx.fill();
 
-    // 접시 외곽
     ctx.beginPath();
     ctx.ellipse(plateX, plateY, rx, ry, 0, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
@@ -387,7 +379,6 @@
     ctx.strokeStyle = "#dcdde1";
     ctx.stroke();
 
-    // 접시 안쪽 바닥 선
     ctx.beginPath();
     ctx.ellipse(plateX, plateY, rx * 0.82, ry * 0.82, 0, 0, Math.PI * 2);
     ctx.strokeStyle = "#f1f2f6";
@@ -395,7 +386,6 @@
     ctx.stroke();
   }
 
-  // 음식 사진 접시 위치에 딱 맞춰 꽉 차게 그리기
   function drawFoodImageOnPlate() {
     const w = canvas.width;
     const h = canvas.height;
@@ -407,12 +397,10 @@
 
     ctx.save();
 
-    // 접시 모양 클리핑
     ctx.beginPath();
     ctx.ellipse(plateX, plateY, w * 0.30, h * 0.09, 0, 0, Math.PI * 2);
     ctx.clip();
 
-    // 음식 이미지 렌더링 (가득 차게 확대)
     ctx.drawImage(
       foodImageObj,
       plateX - (targetW / 2),
@@ -424,7 +412,6 @@
     ctx.restore();
   }
 
-  // 문구 텍스트 렌더링
   function drawCaption() {
     if (!state.caption) return;
 
@@ -441,12 +428,10 @@
       y = canvas.height * 0.5;
     }
 
-    // 외곽선
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 5;
     ctx.strokeText(state.caption, x, y);
 
-    // 본문
     ctx.fillStyle = state.textColor;
     ctx.fillText(state.caption, x, y);
   }
