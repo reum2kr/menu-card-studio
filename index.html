@@ -14,14 +14,10 @@
       --text-color: #1e293b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       display: flex;
@@ -33,7 +29,6 @@
 
     .app-container {
       display: flex;
-      flex-direction: row;
       gap: 24px;
       background-color: var(--panel-bg);
       border-radius: 12px;
@@ -46,7 +41,6 @@
     .preview-section {
       flex: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       background-color: #f8fafc;
@@ -77,11 +71,7 @@
       gap: 6px;
     }
 
-    label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #475569;
-    }
+    label { font-size: 0.85rem; font-weight: 600; color: #475569; }
 
     input[type="text"], select, input[type="number"], input[type="color"] {
       width: 100%;
@@ -89,18 +79,9 @@
       border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.9rem;
-      outline: none;
     }
 
-    input[type="text"]:focus, select:focus, input[type="number"]:focus {
-      border-color: var(--primary-color);
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
+    .btn-group { display: flex; gap: 8px; margin-top: 8px; }
 
     button {
       flex: 1;
@@ -109,34 +90,14 @@
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s;
     }
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .btn-secondary {
-      background-color: #e2e8f0;
-      color: #334155;
-    }
-
-    .btn-secondary:hover {
-      background-color: #cbd5e1;
-    }
+    .btn-primary { background-color: var(--primary-color); color: #fff; }
+    .btn-secondary { background-color: #e2e8f0; color: #334155; }
 
     @media (max-width: 768px) {
-      .app-container {
-        flex-direction: column;
-      }
-      .controls-section {
-        width: 100%;
-      }
+      .app-container { flex-direction: column; }
+      .controls-section { width: 100%; }
     }
   </style>
 </head>
@@ -248,19 +209,18 @@
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 캐릭터 및 식탁 그리기
+    // 1. 캐릭터 그리기
     drawCharacterAndScene();
 
-    // 음식 사진 그리기
+    // 2. 음식 사진 그리기
     if (foodImageObj) {
       drawFoodImageOnPlate();
     }
 
-    // 자막 텍스트 그리기
+    // 3. 자막 그리기
     drawCaption();
   }
 
-  // 캔버스 자체 코드로 귀여운 캐릭터 직접 그리기
   function drawCharacterAndScene() {
     const w = canvas.width;
     const h = canvas.height;
@@ -285,13 +245,13 @@
     const cx = w / 2;
     const cy = h * 0.32;
 
-    // 뒷머리
+    // 머리
     ctx.beginPath();
     ctx.arc(cx, cy - 10, 110, 0, Math.PI * 2);
     ctx.fillStyle = "#4a2e18";
     ctx.fill();
 
-    // 몸통 (분홍 옷)
+    // 몸통
     ctx.beginPath();
     ctx.moveTo(cx - 100, tableY);
     ctx.quadraticCurveTo(cx - 80, cy + 90, cx, cy + 90);
@@ -299,7 +259,7 @@
     ctx.fillStyle = "#f8a5c2";
     ctx.fill();
 
-    // 옷 깃
+    // 깃
     ctx.beginPath();
     ctx.ellipse(cx, cy + 85, 45, 18, 0, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
@@ -324,7 +284,7 @@
     ctx.fillStyle = "#222222";
     ctx.fill();
 
-    // 눈동자 하이라이트
+    // 반사광
     ctx.beginPath();
     ctx.arc(cx - 40, cy - 5, 6, 0, Math.PI * 2);
     ctx.arc(cx + 30, cy - 5, 6, 0, Math.PI * 2);
@@ -344,7 +304,7 @@
     ctx.fillStyle = "#c0392b";
     ctx.fill();
 
-    // 왼쪽 포크
+    // 양손
     ctx.fillStyle = "#d1d8e0";
     ctx.fillRect(cx - 140, cy + 30, 12, 80);
     ctx.beginPath();
@@ -352,7 +312,6 @@
     ctx.fillStyle = "#ffdbac";
     ctx.fill();
 
-    // 오른쪽 스푼
     ctx.fillStyle = "#d1d8e0";
     ctx.fillRect(cx + 128, cy + 30, 12, 80);
     ctx.beginPath();
@@ -396,7 +355,6 @@
     const targetH = h * 0.22;
 
     ctx.save();
-
     ctx.beginPath();
     ctx.ellipse(plateX, plateY, w * 0.30, h * 0.09, 0, 0, Math.PI * 2);
     ctx.clip();
@@ -408,7 +366,6 @@
       targetW,
       targetH
     );
-
     ctx.restore();
   }
 
@@ -511,7 +468,6 @@
       reader.onload = (evt) => {
         try {
           const importedState = JSON.parse(evt.target.result);
-          
           if (!importedState || typeof importedState !== 'object' || !importedState.ratio) {
             throw new Error("유효하지 않은 JSON 구조입니다.");
           }
@@ -539,7 +495,7 @@
           }
 
         } catch (err) {
-          alert("JSON 데이터를 불러오는 중 오류가 발생했습니다. 기존 상태를 유지합니다.");
+          alert("JSON 데이터를 불러오는 중 오류가 발생했습니다.");
           e.target.value = '';
         }
       };
